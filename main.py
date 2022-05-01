@@ -188,7 +188,7 @@ def mnistCombined():
 	x_test = x_test.astype("float32") / 255
 	y_train = keras.utils.to_categorical(y_train)
 	y_test = keras.utils.to_categorical(y_test)
-	return ((x_train,y_train),(x_test,y_test))
+	return (tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(32),tf.data.Dataset.from_tensor_slices((x_test, y_test)).batch(32))
 
 def mnistModel():
 	return Sequential(
@@ -206,10 +206,10 @@ if __name__ == "__main__":
 	logging.getLogger("tensorflow").disabled = True
 	os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 	datasets = {
-		"addnist": (addnistTrain(), addnistTest()),
-		"flowers": (flowersTrain(),flowersTest()),
-		"goodvbad": (goodvbadTrain(),goodvbadTest()),
-		"rice": (riceTrain(),riceTest()),
+		#"addnist": (addnistTrain(), addnistTest()),
+		#"flowers": (flowersTrain(),flowersTest()),
+		#"goodvbad": (goodvbadTrain(),goodvbadTest()),
+		#"rice": (riceTrain(),riceTest()),
 		"mnist": mnistCombined()
 	}
 	convModels = {
