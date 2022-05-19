@@ -206,10 +206,10 @@ if __name__ == "__main__":
 	logging.getLogger("tensorflow").disabled = True
 	os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 	datasets = {
-		#"addnist": (addnistTrain(), addnistTest()),
-		#"flowers": (flowersTrain(),flowersTest()),
-		#"goodvbad": (goodvbadTrain(),goodvbadTest()),
-		#"rice": (riceTrain(),riceTest()),
+		"addnist": (addnistTrain(), addnistTest()),
+		"flowers": (flowersTrain(),flowersTest()),
+		"goodvbad": (goodvbadTrain(),goodvbadTest()),
+		"rice": (riceTrain(),riceTest()),
 		"mnist": mnistCombined()
 	}
 	convModels = {
@@ -234,7 +234,7 @@ if __name__ == "__main__":
 				fieldNames = ["trainAcc", "testAcc"]
 				writer = csv.DictWriter(fileOut, fieldnames=fieldNames)
 				writer.writeheader()
-				for _ in range(10):
+				for run in range(10):
 					model = convModels[name]()
 					for __ in range(depth):
 						model.add(Dense(round(inputWidths[name] * widthMultiplier),activation="relu"))
@@ -243,7 +243,7 @@ if __name__ == "__main__":
 					model.add(Dense(numClasses[name],activation="softmax"))
 					model.compile(loss=keras.losses.categorical_crossentropy, optimizer=keras.optimizers.Adam(),
 								  metrics=["accuracy"])
-					print(f"Training {name} model with depth {depth} and width multiplier {widthMultiplier}. Run {_+1}")
+					print(f"Training {name} model with depth {depth} and width multiplier {widthMultiplier}. Run {run+1}")
 					history = model.fit(trainSet,epochs=numEpochs[name],verbose=0)
 					results = model.evaluate(testSet,verbose=0)
 					print(f"Train accuracy: {history.history['accuracy'][-1]} Test accuracy: {results[1]}")
